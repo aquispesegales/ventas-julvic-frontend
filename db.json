@@ -1,0 +1,11 @@
+{
+  "clientes": [
+    {
+      "identificacion": "9133040",
+      "nombre": "ALVARO ZENON QUISPE SEGALES",
+      "apellido_paterno": "QUISPE",
+      "apellido_materno": "SEGALES",
+      "direccion":"AVENIDA LOS LEONES"
+    }
+  ]
+}
