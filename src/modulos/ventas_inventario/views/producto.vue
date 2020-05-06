@@ -51,14 +51,19 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
+                <v-autocomplete
                   class="caption"
-                  dense
                   hide-details
                   outlined
-                  label="Categoria "
                   v-model="objProducto.categoria_id"
-                ></v-text-field>
+                  :items="items_categoria"
+                  dense
+                  chips
+                  small-chips
+                  label="Categoria"
+                  item-text="nombre"
+                  item-value="categoria_id"
+                ></v-autocomplete>
               </v-col>
             </v-row>
           </v-container>
@@ -87,7 +92,7 @@
           <td class="pa-2 font-weight-light caption">{{item.descripcion}}</td>
           <td class="pa-2 font-weight-light caption">{{item.precio}}</td>
           <td class="pa-2 font-weight-light caption">{{item.stock}}</td>
-          <td class="pa-2 font-weight-light caption">{{item.categoria_id}}</td>
+          <td class="pa-2 font-weight-light caption">{{item.categoria.nombre}}</td>
           <td
             class="pa-2 font-weight-light caption"
           >{{ $fechas.FormatearFechaParaLocal(item.fecha_registro)}}</td>
@@ -121,19 +126,26 @@ export default {
         { text: "Descripcion ", value: "descripcion" },
         { text: "Precio ", value: "precio" },
         { text: "Stock ", value: "stock" },
-        { text: "categoria_id ", value: "categoria_id" },
+        { text: "categoria ", value: "categoria.nombre" },
         { text: "Fecha Registro ", value: "fecha_registro" },
         { text: "Acciones ", value: "" }
       ],
       items_producto: [],
+      items_categoria:[],
       objProducto: {}
     };
   },
 
   mounted() {
     this.obtenerProductos();
+    this.obtenerCategorias();
   },
   methods: {
+    obtenerCategorias() {
+      this.axios.get(`categoria/obtener-todos`).then(r => {
+        this.items_categoria = r.data.categorias;
+      });
+    },
     obtenerProductos() {
       this.axios.get(`producto/obtener-todos`).then(r => {
         this.items_producto = r.data.productos;

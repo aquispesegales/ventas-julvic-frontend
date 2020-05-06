@@ -48,6 +48,11 @@ export default {
       ["Categorias", "mdi-home","/categoria"],
       ["Clientes", "mdi-home","/cliente"],
       ["Productos", "mdi-home","/producto"],
+      ["Vender", "mdi-home","/vender"],
+      ["Carrito", "mdi-home","/carrito"],
+      ["Ventas Realizadas", "mdi-home","/ventas-realizadas"],
+      
+      
     ]
   }),
   methods:{

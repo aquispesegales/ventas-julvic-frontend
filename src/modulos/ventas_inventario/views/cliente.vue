@@ -20,6 +20,16 @@
                   v-model="objCliente.nombre"
                 ></v-text-field>
               </v-col>
+                 <v-col cols="12">
+                <v-text-field
+                  class="caption"
+                  dense
+                  hide-details
+                  outlined
+                  label="NIT o CI "
+                  v-model="objCliente.nit_ci"
+                ></v-text-field>
+              </v-col>
               <v-col cols="12">
                 <v-text-field
                   class="caption"
@@ -96,6 +106,7 @@
       <template v-slot:item="{ item }">
         <tr>
           <td class="pa-2 font-weight-light caption">{{item.nombre}}</td>
+          <td class="pa-2 font-weight-light caption">{{item.nit_ci}}</td>
           <td class="pa-2 font-weight-light caption">{{item.apellido_pat}}</td>
           <td class="pa-2 font-weight-light caption">{{item.apellido_mat}}</td>
           <td class="pa-2 font-weight-light caption">{{item.correo}}</td>
@@ -131,6 +142,7 @@ export default {
       search: "",
       header_cliente: [
         { text: "Nombre", value: "nombre" },
+        { text: "NIT o CI", value: "nit_ci" },
         { text: "Apellido Paterno ", value: "apellido_pat" },
         { text: "Apellido Materno ", value: "apellido_mat" },
         { text: "Correo ", value: "correo" },

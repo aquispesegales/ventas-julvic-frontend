@@ -22,7 +22,37 @@
         
          
           <v-spacer></v-spacer>
-        
+
+
+      
+
+
+        <v-menu :close-on-content-click="false" offset-x>
+        <template v-slot:activator="{ on }">
+            <v-badge
+                color="green"
+                :content="cantidadTotal"
+            >
+                <v-icon v-on="on" >mdi-cart</v-icon>
+            </v-badge>
+        </template>
+        <v-card>
+          <div v-if="getCarrito.length>0">
+            <div class="text-center title">
+              <h4>PRODUCTOS</h4>
+            </div>
+            <v-divider></v-divider>
+            <datosCarritoComponent ></datosCarritoComponent>
+            <v-btn block small color="primary" @click="irCarrito()">Ir a Cesta</v-btn>
+          </div>
+          <div v-else>
+            <h4 class="pa-5">No existen productos en carrito</h4>
+          </div>
+        </v-card>
+      </v-menu>
+
+
+         
         </v-app-bar>
 
         <v-sheet id="scrolling-techniques-7" class="overflow-y-auto" max-height="1000">
@@ -37,7 +67,14 @@
   </v-app>
 </template>
 <script>
+
+
+
+
+
 import AppMenu from "@/shared/app-menu.vue";
+import typesUtils from "@/modulos/ventas_inventario/store/types/utils";
+import datosCarritoComponent from "@/modulos/ventas_inventario/components/datosCarrito";
 import { mapGetters } from "vuex";
 
 
@@ -45,11 +82,23 @@ export default {
   name: "App",
   components: {
     AppMenu,
-   
+ 
+    datosCarritoComponent
+  
   },
   computed: {
     ...mapGetters({
+      getCarrito: typesUtils.getters.getCarrito
     }),
+    cantidadTotal() {
+      return this.getCarrito.reduce(function(total, currentValue) {
+        return parseInt(total) + parseInt(currentValue.cantidad);
+      }, 0);
+
+    },
+    irCarrito(){
+       this.$router.push('/carrito');
+    }
 
   },
   data: () => ({
