@@ -17,17 +17,10 @@
         >
 
         <v-app-bar-nav-icon  @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-        
           <v-toolbar-title  class="pr-7" >TITULO</v-toolbar-title>
-        
-         
           <v-spacer></v-spacer>
 
-
-      
-
-
-        <v-menu :close-on-content-click="false" offset-x>
+        <v-menu :close-on-content-click="false" offset-x  v-if="$route.path==='/vender'">
         <template v-slot:activator="{ on }">
             <v-badge
                 color="green"

@@ -28,5 +28,10 @@ export default [
         path: '/ventas-realizadas',
         name:'Carrito',
         component: () => import('@/modulos/ventas_inventario/views/ventas-realizadas.vue')
+    },
+    {
+        path: '/usuario',
+        name:'Usuario',
+        component: () => import('@/modulos/ventas_inventario/views/usuario.vue')
     }
   ]

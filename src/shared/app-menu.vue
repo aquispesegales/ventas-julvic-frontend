@@ -34,9 +34,9 @@
               <v-list-item-title>Configuraciones </v-list-item-title>
             </v-list-item-content>
           </template>
-          <!--<v-list-item v-for="(item, i) in lstSubCuentasPorCobrar" :key="i"  @click="go(item[2])">
+          <v-list-item v-for="(item, i) in opcionesOtros" :key="i"  @click="go(item[2])">
             <span class="subMenu caption">{{item[0]}}</span>
-          </v-list-item>-->
+          </v-list-item>
         </v-list-group>
     </v-list>
   </nav>
@@ -53,6 +53,9 @@ export default {
       ["Ventas Realizadas", "mdi-home","/ventas-realizadas"],
       
       
+    ],
+    opcionesOtros:[
+       ["Usuarios", "mdi-home","/usuario"],
     ]
   }),
   methods:{
