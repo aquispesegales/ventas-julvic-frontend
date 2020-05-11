@@ -53,7 +53,6 @@
       </template>
       
     </v-data-table>
-    {{getCarrito}}
 
   </v-card>
 </template>
@@ -118,7 +117,7 @@ export default {
       let cantidadTotalComprado =  this.getCarrito.reduce(function(total, currentValue) {
         return total + parseInt(currentValue.cantidad);
       }, 0);
-      
+
 
         if(cantidadTotalComprado >= this.objCarrito.stock){
            return alert('Anteriormente ya Agrego a Carrito : '+cantidadTotalComprado);

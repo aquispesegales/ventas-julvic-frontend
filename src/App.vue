@@ -17,7 +17,7 @@
         >
 
         <v-app-bar-nav-icon  @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-          <v-toolbar-title  class="pr-7" >TITULO</v-toolbar-title>
+          <v-toolbar-title  class="pr-7" >{{$route.name}}</v-toolbar-title>
           <v-spacer></v-spacer>
 
         <v-menu :close-on-content-click="false" offset-x  v-if="$route.path==='/vender'">

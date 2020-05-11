@@ -1,13 +1,15 @@
 import types from "@/modulos/ventas_inventario/store/types/utils";
 import Vue from 'vue'
 const state = {
-    carrito:[]
+    carrito:[],
+    tituloNav:''
 };
 
 const getters = {
     [types.getters.getCarrito]: state => {
         return state.carrito;
-    }
+    },
+
 }
 const actions = {
 
@@ -18,7 +20,10 @@ const mutations = {
     },
     [types.mutations.setCarrito]: (state, lstCarrito) => {
         state.carrito = lstCarrito;
-    }
+    },
+
+
+    
 
     
 }

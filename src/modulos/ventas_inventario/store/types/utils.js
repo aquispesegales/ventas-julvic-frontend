@@ -7,6 +7,6 @@ export default namespace('utils',{
     ],
     mutations:[
         'addCarrito',
-        'setCarrito'
+        'setCarrito',
     ]
 })
