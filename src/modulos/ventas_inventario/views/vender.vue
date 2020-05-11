@@ -51,13 +51,16 @@
           </td>
         </tr>
       </template>
+      
     </v-data-table>
+    {{getCarrito}}
+
   </v-card>
 </template>
 <script>
 import typesUtils from "@/modulos/ventas_inventario/store/types/utils";
 
-import { mapMutations } from 'vuex';
+import { mapMutations, mapGetters } from 'vuex';
 export default {
  
   data() {
@@ -81,6 +84,11 @@ export default {
   mounted() {
     this.obtenerProductos();
   },
+  computed:{
+    ...mapGetters({
+      getCarrito: typesUtils.getters.getCarrito
+    })
+  },
   methods: {
     ...mapMutations({
         addCarrito: typesUtils.mutations.addCarrito
@@ -101,6 +109,22 @@ export default {
         if(!this.objCarrito.precio || this.objCarrito.precio<=0){
         return alert('Precio Incorrecta');
       }
+      if(this.objCarrito.cantidad > this.objCarrito.stock ){
+          return alert('Cantidad disponible: '+ this.objCarrito.stock);
+      }
+      if(this.getCarrito.filter(x => x.producto_id===this.objCarrito.producto_id).length>0){
+
+    
+      let cantidadTotalComprado =  this.getCarrito.reduce(function(total, currentValue) {
+        return total + parseInt(currentValue.cantidad);
+      }, 0);
+      
+
+        if(cantidadTotalComprado >= this.objCarrito.stock){
+           return alert('Anteriormente ya Agrego a Carrito : '+cantidadTotalComprado);
+        }
+      }
+
       let carrito = {
         producto_id : this.objCarrito.producto_id,
         nombre : this.objCarrito.nombre,
