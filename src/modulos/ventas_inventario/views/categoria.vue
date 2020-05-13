@@ -151,11 +151,21 @@ export default {
       this.dialogo = true;
     },
     eliminar(item) {
-       this.setdialogProgress(true);
+      this.setdialogProgress(true);
+
       this.axios.delete(`categoria/eliminar/${item.categoria_id}`).then(r => {
         this.obtenerCategorias();
          this.setdialogProgress(false);
+      }).catch(error => {
+         this.$notify({
+          type: 'error',
+          group: 'notificacion',
+          title: 'Error',
+          text: 'No se pudo eliminar, Verificar si este registro no esta usado'
+        });
+        this.setdialogProgress(false);
       });
+
     }
   }
 };

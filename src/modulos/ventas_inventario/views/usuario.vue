@@ -157,6 +157,14 @@ export default {
       this.axios.delete(`usuario/eliminar/${item.usuario_id}`).then(r => {
         this.obtenerUsuarios();
         this.setdialogProgress(false);
+      }).catch(error => {
+         this.$notify({
+          type: 'error',
+          group: 'notificacion',
+          title: 'Error',
+          text: 'No se pudo eliminar, Verificar si este registro no esta usado'
+        });
+        this.setdialogProgress(false);
       });
     },
     editar(item) {

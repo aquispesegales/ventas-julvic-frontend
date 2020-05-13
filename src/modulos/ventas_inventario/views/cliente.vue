@@ -175,6 +175,14 @@ export default {
       this.axios.delete(`cliente/eliminar/${item.cliente_id}`).then(r => {
         this.obtenerClientes();
          this.setdialogProgress(false);
+      }).catch(error => {
+         this.$notify({
+          type: 'error',
+          group: 'notificacion',
+          title: 'Error',
+          text: 'No se pudo eliminar, Verificar si este registro no esta usado'
+        });
+        this.setdialogProgress(false);
       });
     },
     editar(item) {
