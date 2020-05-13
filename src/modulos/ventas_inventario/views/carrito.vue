@@ -50,7 +50,6 @@
 <script>
 import typesUtils from "@/modulos/ventas_inventario/store/types/utils";
 import datosCarritoComponent from "@/modulos/ventas_inventario/components/datosCarrito";
-
 import { mapGetters, mapMutations } from "vuex";
 
 export default {
@@ -70,10 +69,12 @@ export default {
 
   methods: {
     ...mapMutations({
-      setCarrito:typesUtils.mutations.setCarrito
+      setCarrito:typesUtils.mutations.setCarrito,
+          setdialogProgress: typesUtils.mutations.setdialogProgress
     }),
 
     buscarClienteByNitCi() {
+      this.setdialogProgress(true);
       this.axios
         .get(`cliente/buscar-cliente-por-nitci/${this.objCliente.nit_ci}`)
         .then(r => {
@@ -82,6 +83,7 @@ export default {
             console.log("respuesta");
             console.log(r.cliente);
           }
+          this.setdialogProgress(false);
         });
     },
     guardarCarrito() {
@@ -100,7 +102,7 @@ export default {
       };
 
       let id_cabecera = 0;
-
+      this.setdialogProgress(true);
       this.axios.post("venta-cab/registrar", cabe).then(r => {
         if (r.data.code == 200) {
           id_cabecera = r.data.venta_cab.id;
@@ -123,6 +125,7 @@ export default {
                       this.setCarrito([]);
                       alert("Se ha guardao Carrito")
                    }
+                   this.setdialogProgress(false);
                 });
           }
         }

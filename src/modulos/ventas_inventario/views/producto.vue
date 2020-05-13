@@ -92,7 +92,7 @@
           <td class="pa-2 font-weight-light caption">{{item.descripcion}}</td>
           <td class="pa-2 font-weight-light caption">{{item.precio}}</td>
           <td class="pa-2 font-weight-light caption">{{item.stock}}</td>
-          <td class="pa-2 font-weight-light caption">{{item.categoria.nombre}}</td>
+          <td class="pa-2 font-weight-light caption">{{(item.categoria)?item.categoria.nombre:''}}</td>
           <td
             class="pa-2 font-weight-light caption"
           >{{ $fechas.FormatearFechaParaLocal(item.fecha_registro)}}</td>
@@ -116,6 +116,8 @@
   </v-card>
 </template>
 <script>
+import typesUtils from "@/modulos/ventas_inventario/store/types/utils";
+import {  mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -141,6 +143,9 @@ export default {
     this.obtenerCategorias();
   },
   methods: {
+    ...mapMutations({
+       setdialogProgress: typesUtils.mutations.setdialogProgress
+    }),
     obtenerCategorias() {
       this.axios.get(`categoria/obtener-todos`).then(r => {
         this.items_categoria = r.data.categorias;
@@ -152,8 +157,10 @@ export default {
       });
     },
     eliminar(item) {
+       this.setdialogProgress(true);
       this.axios.delete(`producto/eliminar/${item.producto_id}`).then(r => {
         this.obtenerProductos();
+         this.setdialogProgress(false);
       });
     },
     editar(item) {
@@ -165,6 +172,11 @@ export default {
       this.objProducto = {};
     },
     registrarOactualizar() {
+        if(!this.objProducto.nombre || !this.objProducto.descripcion ){
+        alert("Debe registrar nombre y descripción como mínimo");
+        return ;
+      }
+       this.setdialogProgress(true);
       if (this.objProducto.producto_id > 0) {
         this.axios
           .put(
@@ -173,10 +185,12 @@ export default {
           )
           .then(r => {
             this.obtenerProductos();
+             this.setdialogProgress(false);
           });
       } else {
         this.axios.post(`producto/registrar`, this.objProducto).then(r => {
           this.obtenerProductos();
+           this.setdialogProgress(false);
         });
       }
       this.dialogo = false;

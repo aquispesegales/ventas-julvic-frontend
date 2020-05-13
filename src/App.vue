@@ -1,8 +1,13 @@
 <template>
   <v-app>
   
+
+  <dialogProgress titulo="Procesando" :dialog="getdialogProgress" ></dialogProgress>
+
+
    <!-- :append-icon="()?'':'mdi-layers-search'" -->
     <notifications group="notificacion" position="bottom" />
+    
     <v-navigation-drawer v-model="drawer" app temporary>
       <app-menu></app-menu>
     </v-navigation-drawer>
@@ -68,6 +73,7 @@
 import AppMenu from "@/shared/app-menu.vue";
 import typesUtils from "@/modulos/ventas_inventario/store/types/utils";
 import datosCarritoComponent from "@/modulos/ventas_inventario/components/datosCarrito";
+import dialogProgress from "@/shared/dialog-progress";
 import { mapGetters } from "vuex";
 
 
@@ -75,13 +81,14 @@ export default {
   name: "App",
   components: {
     AppMenu,
- 
+    dialogProgress,
     datosCarritoComponent
   
   },
   computed: {
     ...mapGetters({
-      getCarrito: typesUtils.getters.getCarrito
+      getCarrito: typesUtils.getters.getCarrito,
+      getdialogProgress: typesUtils.getters.getdialogProgress
     }),
     cantidadTotal() {
       return this.getCarrito.reduce(function(total, currentValue) {

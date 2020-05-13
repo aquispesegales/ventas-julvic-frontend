@@ -42,7 +42,7 @@
           <td class="pa-2 font-weight-light caption">{{item.descripcion}}</td>
           <td class="pa-2 font-weight-light caption">{{item.precio}}</td>
           <td class="pa-2 font-weight-light caption">{{item.stock}}</td>
-          <td class="pa-2 font-weight-light caption">{{item.categoria.nombre}}</td>
+          <td class="pa-2 font-weight-light caption">{{item.categoria?item.categoria.nombre:''}}</td>
           <td
             class="pa-2 font-weight-light caption"
           >{{ $fechas.FormatearFechaParaLocal(item.fecha_registro)}}</td>

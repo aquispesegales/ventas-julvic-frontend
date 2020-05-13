@@ -81,6 +81,8 @@
   </v-card>
 </template>
 <script>
+import typesUtils from "@/modulos/ventas_inventario/store/types/utils";
+import { mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -101,6 +103,9 @@ export default {
     this.obtenerCategorias();
   },
   methods: {
+    ...mapMutations({
+        setdialogProgress: typesUtils.mutations.setdialogProgress
+    }),
     obtenerCategorias() {
       this.axios.get(`categoria/obtener-todos`).then(r => {
         this.items_categoria = r.data.categorias;
@@ -111,60 +116,16 @@ export default {
       this.objCategria = {};
     },
     registrarOactualizar() {
-
-
-     /* this.$swal
-        .fire({
-          title: "Esta seguro de Actualizar Registro?",
-          text: "Esta Acción no se puede revertir!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "OK",
-          showLoaderOnConfirm: true,
-          preConfirm: () => {
-            return this.axios
-              .put(
-                `${this.propiedades.api_update}/${
-                  this.obj[this.propiedades.id_key]
-                }`,
-                this.obj
-              )
-              .then(r => {
-                if (r.status != 200) {
-                  throw new Error("Error en la Conexión");
-                }
-                return r.data;
-              })
-              .catch(error => {
-                
-              });
-          },
-          allowOutsideClick: () => !this.$swal.isLoading()
-        })
-        .then(res => {
-          console.log(res);
-          if (res.value) {
-            if (res.value.status === "success") {
-              this.mensajeConfirmacion(
-                "success",
-                "Actualización de Registro Exitoso "
-              );
-              if (this.$route.path === "/producto") {
-                this.actualizarImagen(this.obj[this.propiedades.id_key]);
-              }
-
-              this.obtener();
-              this.dialogo = false;
-            } else {
-              this.mensajeConfirmacion("error", res.value.menssaje);
-              this.obtener();
-            }
-          }
-        });*/
-
-
-
-
+      if(!this.objCategria.nombre || !this.objCategria.descripcion){
+        this.$notify({
+          type: 'error',
+          group: 'notificacion',
+          title: 'Error',
+          text: 'Debe Registrar Nombre y Descripción de la Categoria'
+        });
+        return;
+      }
+      this.setdialogProgress(true);
       if (this.objCategria.categoria_id > 0) {
         this.axios
           .put(
@@ -173,26 +134,27 @@ export default {
           )
           .then(r => {
             this.obtenerCategorias();
+            this.setdialogProgress(false);
+            this.dialogo = false;
           });
       } else {
         this.axios.post(`categoria/registrar`, this.objCategria).then(r => {
           this.obtenerCategorias();
+          this.setdialogProgress(false);
+          this.dialogo = false;
         });
       }
-      this.dialogo = false;
-
-
-
-
-
+  
     },
     editar(item) {
       this.objCategria = item;
       this.dialogo = true;
     },
     eliminar(item) {
+       this.setdialogProgress(true);
       this.axios.delete(`categoria/eliminar/${item.categoria_id}`).then(r => {
         this.obtenerCategorias();
+         this.setdialogProgress(false);
       });
     }
   }

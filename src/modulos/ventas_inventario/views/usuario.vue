@@ -118,6 +118,8 @@
   </v-card>
 </template>
 <script>
+import typesUtils from "@/modulos/ventas_inventario/store/types/utils";
+import {  mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -142,14 +144,19 @@ export default {
     this.obtenerUsuarios();
   },
   methods: {
+    ...mapMutations({
+       setdialogProgress: typesUtils.mutations.setdialogProgress
+    }),
     obtenerUsuarios() {
       this.axios.get(`usuario/obtener-todos`).then(r => {
         this.items_usuario = r.data.usuarios;
       });
     },
     eliminar(item) {
+      this.setdialogProgress(true);
       this.axios.delete(`usuario/eliminar/${item.usuario_id}`).then(r => {
         this.obtenerUsuarios();
+        this.setdialogProgress(false);
       });
     },
     editar(item) {
@@ -161,6 +168,7 @@ export default {
       this.objUsuario = {};
     },
     registrarOactualizar() {
+      this.setdialogProgress(true);
       if (this.objUsuario.usuario_id > 0) {
         this.axios
           .put(
@@ -169,10 +177,12 @@ export default {
           )
           .then(r => {
             this.obtenerUsuarios();
+            this.setdialogProgress(false);
           });
       } else {
         this.axios.post(`usuario/registrar`, this.objUsuario).then(r => {
           this.obtenerUsuarios();
+          this.setdialogProgress(false);
         });
       }
       this.dialogo = false;

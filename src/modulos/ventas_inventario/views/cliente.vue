@@ -135,6 +135,8 @@
   </v-card>
 </template>
 <script>
+import typesUtils from "@/modulos/ventas_inventario/store/types/utils";
+import {  mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -160,14 +162,19 @@ export default {
     this.obtenerClientes();
   },
   methods: {
+    ...mapMutations({
+       setdialogProgress: typesUtils.mutations.setdialogProgress
+    }),
     obtenerClientes() {
       this.axios.get(`cliente/obtener-todos`).then(r => {
         this.items_cliente = r.data.clientes;
       });
     },
     eliminar(item) {
+       this.setdialogProgress(true);
       this.axios.delete(`cliente/eliminar/${item.cliente_id}`).then(r => {
         this.obtenerClientes();
+         this.setdialogProgress(false);
       });
     },
     editar(item) {
@@ -179,6 +186,11 @@ export default {
       this.objCliente = {};
     },
     registrarOactualizar() {
+      if(!this.objCliente.nombre || !this.objCliente.nit_ci ){
+        alert("Debe registrar nombre y ci como mínimo");
+        return ;
+      }
+       this.setdialogProgress(true);
       if (this.objCliente.cliente_id > 0) {
         this.axios
           .put(
@@ -186,11 +198,13 @@ export default {
             this.objCliente
           )
           .then(r => {
+             this.setdialogProgress(false);
             this.obtenerClientes();
           });
       } else {
         this.axios.post(`cliente/registrar`, this.objCliente).then(r => {
           this.obtenerClientes();
+           this.setdialogProgress(false);
         });
       }
       this.dialogo = false;
