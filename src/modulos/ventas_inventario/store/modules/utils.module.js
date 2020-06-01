@@ -3,7 +3,8 @@ import Vue from 'vue'
 const state = {
     carrito:[],
     tituloNav:'',
-    dialogProgress:false
+    dialogProgress:false,
+    objDatosUsuario:[]
 };
 
 const getters = {
@@ -12,6 +13,9 @@ const getters = {
     },
     [types.getters.getCarrito]: state => {
         return state.carrito;
+    },
+    [types.getters.getObjDatosUsuario]: state => {
+        return state.objDatosUsuario;
     },
 
 }
@@ -28,11 +32,9 @@ const mutations = {
     [types.mutations.setdialogProgress]: (state, dialogProgress) => {
         state.dialogProgress = dialogProgress;
     },
-
-
-    
-
-    
+    [types.mutations.setObjDatosUsuario]: (state, objDatosUsuarios) => {
+        state.objDatosUsuario = objDatosUsuarios;
+    }
 }
 
 export default {

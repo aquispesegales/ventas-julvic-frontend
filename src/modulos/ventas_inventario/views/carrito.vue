@@ -74,25 +74,29 @@ export default {
     }),
 
     buscarClienteByNitCi() {
+      
       this.setdialogProgress(true);
       this.axios
         .get(`cliente/buscar-cliente-por-nitci/${this.objCliente.nit_ci}`)
         .then(r => {
+           this.objCliente = {};
           if (r.data.code == 200) {
             this.objCliente = r.data.cliente;
             console.log("respuesta");
             console.log(r.cliente);
+          }else{
+            alert("Cliente no Encontrado")
           }
           this.setdialogProgress(false);
         });
     },
     guardarCarrito() {
       if (Object.keys(this.objCliente).length === 0) {
-        alert("Debe Guardar Cliente");
+        alert("Debe registrar Cliente");
         return;
       }
       if (this.getCarrito.length <= 0) {
-        alert("Debe Guardar Productos");
+        alert("Debe Registrar Productos");
         return;
       }
       //arma cabeceera
@@ -123,7 +127,10 @@ export default {
                    if (rr.data.code == 200) {
                       this.objCliente={};
                       this.setCarrito([]);
-                      alert("Se ha guardao Carrito")
+                      alert("Venta Realizada")
+                      this.$router.push('/vender');
+                   }else{
+                     alert("Erro al relizar la venta, favor comunicarse con sistemas")
                    }
                    this.setdialogProgress(false);
                 });

@@ -14,7 +14,7 @@
             <v-divider></v-divider>
             <br />
             <v-text-field label="Cantidad" class="indigo--text display-1" outlined v-model="objCarrito.cantidad"></v-text-field>
-            <v-text-field outlined class="indigo--text display-1" label="Precio" prefix="$" v-model="objCarrito.precio"></v-text-field>
+            <v-text-field outlined class="indigo--text display-1" label="Precio" prefix="Bs " v-model="objCarrito.precio"></v-text-field>
           </v-container>
         </v-card-text>
       </v-card>

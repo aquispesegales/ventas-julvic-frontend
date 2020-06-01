@@ -61,9 +61,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field class="caption" dense hide-details outlined label="Telefono "></v-text-field>
-
-                <v-switch v-model="objUsuario.es_admin" :label="`Es Administrador`"></v-switch>
+                <v-switch v-model="objUsuario.es_admin" :label="`Es Suvervisor?`"></v-switch>
               </v-col>
              
             </v-row>
@@ -131,7 +129,7 @@ export default {
         { text: "Apellido Paterno ", value: "apellido_pat" },
         { text: "Apellido Materno ", value: "apellido_mat" },
         { text: "Usuario ", value: "usuario_pc" },
-        { text: "Administrador ", value: "es_admin" },
+        { text: "Supervisor ", value: "es_admin" },
         { text: "Fecha Registro ", value: "fecha_registro" },
         { text: "Acciones ", value: "" }
       ],
@@ -184,13 +182,25 @@ export default {
             this.objUsuario
           )
           .then(r => {
-            this.obtenerUsuarios();
+        
+            if(r.data.code!=200){
+              alert("Erro al Actualizar Usuario conuquese con sistemas");
+            }else{
+              this.obtenerUsuarios();
+            }
+            
             this.setdialogProgress(false);
           });
       } else {
         this.axios.post(`usuario/registrar`, this.objUsuario).then(r => {
-          this.obtenerUsuarios();
-          this.setdialogProgress(false);
+
+           if(r.data.code!=200){
+              alert("Erro al insertar Usuario conuquese con sistemas");
+            }else{
+              this.obtenerUsuarios();
+            }
+            
+            this.setdialogProgress(false);
         });
       }
       this.dialogo = false;

@@ -16,7 +16,7 @@ export default [
     },
     {
         path: '/vender',
-        name:'Productos',
+        name:'Punto de Venta',
         component: () => import('@/modulos/ventas_inventario/views/vender.vue')
     },
     {
@@ -26,12 +26,17 @@ export default [
     },
     {
         path: '/ventas-realizadas',
-        name:'Carrito',
+        name:'Ventas Realizadas',
         component: () => import('@/modulos/ventas_inventario/views/ventas-realizadas.vue')
     },
     {
         path: '/usuario',
-        name:'Usuario',
+        name:'Usuarios',
         component: () => import('@/modulos/ventas_inventario/views/usuario.vue')
+    },
+    {
+        path: '/',
+        name:'Login',
+        component: () => import('@/shared/login.vue')
     }
   ]

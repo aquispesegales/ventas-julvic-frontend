@@ -167,7 +167,11 @@ export default {
     }),
     obtenerClientes() {
       this.axios.get(`cliente/obtener-todos`).then(r => {
-        this.items_cliente = r.data.clientes;
+       
+     
+          this.items_cliente = r.data.clientes;
+   
+        
       });
     },
     eliminar(item) {
@@ -206,11 +210,20 @@ export default {
             this.objCliente
           )
           .then(r => {
+
+               if(r.data.code!=200){
+            alert("Error al registrar clientes, comunicarse con sistemas");
+          }
+
              this.setdialogProgress(false);
             this.obtenerClientes();
           });
       } else {
         this.axios.post(`cliente/registrar`, this.objCliente).then(r => {
+           if(r.data.code!=200){
+                   alert("Error al registrar clientes, comunicarse con sistemas");
+          }
+
           this.obtenerClientes();
            this.setdialogProgress(false);
         });

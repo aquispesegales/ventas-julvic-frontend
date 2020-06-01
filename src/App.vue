@@ -88,7 +88,8 @@ export default {
   computed: {
     ...mapGetters({
       getCarrito: typesUtils.getters.getCarrito,
-      getdialogProgress: typesUtils.getters.getdialogProgress
+      getdialogProgress: typesUtils.getters.getdialogProgress,
+      
     }),
     cantidadTotal() {
       return this.getCarrito.reduce(function(total, currentValue) {
@@ -96,9 +97,7 @@ export default {
       }, 0);
 
     },
-    irCarrito(){
-       this.$router.push('/carrito');
-    }
+
 
   },
   data: () => ({
@@ -114,6 +113,9 @@ export default {
   methods: {
     go(url) {
       this.$router.push(url);
+    },
+        irCarrito(){
+       this.$router.push('/carrito');
     }
   }
 };
