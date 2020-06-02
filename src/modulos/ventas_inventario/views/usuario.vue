@@ -63,7 +63,6 @@
               <v-col cols="12">
                 <v-switch v-model="objUsuario.es_admin" :label="`Es Suvervisor?`"></v-switch>
               </v-col>
-             
             </v-row>
           </v-container>
         </v-card-text>
@@ -96,7 +95,7 @@
           <td
             class="pa-2 font-weight-light caption"
           >{{ $fechas.FormatearFechaParaLocal(item.fecha_registro)}}</td>
-          <td>
+          <td v-if="esSupervisor">
             <v-btn class="mx-2" fab dark x-small color="teal" @click="editar(item)">
               <v-icon dark small>mdi-pencil</v-icon>
             </v-btn>
@@ -104,20 +103,21 @@
               <v-icon small dark>mdi-delete</v-icon>
             </v-btn>
           </td>
+          <td v-else>Supervisor puede Adm. Usuarios</td>
         </tr>
       </template>
     </v-data-table>
 
     <!-- boton lfotante -->
 
-    <v-btn class="mx-2 fixed" fab dark color="indigo" @click="nuevo()">
+    <v-btn v-if="esSupervisor" class="mx-2 fixed" fab dark color="indigo" @click="nuevo()">
       <v-icon dark>mdi-plus</v-icon>
     </v-btn>
   </v-card>
 </template>
 <script>
 import typesUtils from "@/modulos/ventas_inventario/store/types/utils";
-import {  mapMutations } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -141,9 +141,24 @@ export default {
   mounted() {
     this.obtenerUsuarios();
   },
+  computed: {
+    ...mapGetters({
+      getObjDatosUsuario: typesUtils.getters.getObjDatosUsuario
+    }),
+    esSupervisor() {
+      if (
+        this.getObjDatosUsuario.length > 0 &&
+        this.getObjDatosUsuario[0].es_admin
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
   methods: {
     ...mapMutations({
-       setdialogProgress: typesUtils.mutations.setdialogProgress
+      setdialogProgress: typesUtils.mutations.setdialogProgress
     }),
     obtenerUsuarios() {
       this.axios.get(`usuario/obtener-todos`).then(r => {
@@ -152,18 +167,22 @@ export default {
     },
     eliminar(item) {
       this.setdialogProgress(true);
-      this.axios.delete(`usuario/eliminar/${item.usuario_id}`).then(r => {
-        this.obtenerUsuarios();
-        this.setdialogProgress(false);
-      }).catch(error => {
-         this.$notify({
-          type: 'error',
-          group: 'notificacion',
-          title: 'Error',
-          text: 'No se pudo eliminar, Verificar si este registro no esta usado'
+      this.axios
+        .delete(`usuario/eliminar/${item.usuario_id}`)
+        .then(r => {
+          this.obtenerUsuarios();
+          this.setdialogProgress(false);
+        })
+        .catch(error => {
+          this.$notify({
+            type: "error",
+            group: "notificacion",
+            title: "Error",
+            text:
+              "No se pudo eliminar, Verificar si este registro no esta usado"
+          });
+          this.setdialogProgress(false);
         });
-        this.setdialogProgress(false);
-      });
     },
     editar(item) {
       this.objUsuario = item;
@@ -182,25 +201,23 @@ export default {
             this.objUsuario
           )
           .then(r => {
-        
-            if(r.data.code!=200){
+            if (r.data.code != 200) {
               alert("Erro al Actualizar Usuario conuquese con sistemas");
-            }else{
+            } else {
               this.obtenerUsuarios();
             }
-            
+
             this.setdialogProgress(false);
           });
       } else {
         this.axios.post(`usuario/registrar`, this.objUsuario).then(r => {
+          if (r.data.code != 200) {
+            alert("Erro al insertar Usuario conuquese con sistemas");
+          } else {
+            this.obtenerUsuarios();
+          }
 
-           if(r.data.code!=200){
-              alert("Erro al insertar Usuario conuquese con sistemas");
-            }else{
-              this.obtenerUsuarios();
-            }
-            
-            this.setdialogProgress(false);
+          this.setdialogProgress(false);
         });
       }
       this.dialogo = false;

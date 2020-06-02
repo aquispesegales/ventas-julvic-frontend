@@ -26,6 +26,9 @@
             class="pa-2 font-weight-light caption"
           >{{$fechas.FormatearFechaParaLocal(item.fecha_registro)}}</td>
           <td class="pa-2 font-weight-light caption">
+            {{item.con_factura?'SI':'NO'}}
+          </td>
+          <td class="pa-2 font-weight-light caption">
            
 
             <v-menu :close-on-content-click="false" offset-y>
@@ -60,6 +63,7 @@ export default {
         { text: "Nombre Cliente", value: "cliente.nombre" },
         { text: "Total Bs", value: "nombre" },
         { text: "Fecha Registro", value: "fecha_registro" },
+        { text: "Con Factura", value: "con_factura" },
         { text: "", value: "" }
       ],
       items_ventas_realizadas: [],

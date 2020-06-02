@@ -4,17 +4,14 @@
       <v-list-item>
         <v-list-item-avatar>
           <v-flex pa-2>
-            <v-avatar
-              class="blue white--text"
-              v-text="iniciales"
-            ></v-avatar>
+            <v-avatar class="blue white--text" v-text="iniciales"></v-avatar>
           </v-flex>
 
           <!--<v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>-->
         </v-list-item-avatar>
         <v-list-tile-content>
           <v-list-item-title class="caption">{{nombre_usuario}}</v-list-item-title>
-         <v-list-item-subtitle class="caption">{{getObjDatosUsuario[0].es_admin?"SUPERVISOR":"CAJERO"}}</v-list-item-subtitle>
+          <v-list-item-subtitle class="caption">{{cargo}}</v-list-item-subtitle>
         </v-list-tile-content>
       </v-list-item>
     </v-list>
@@ -49,10 +46,8 @@
   </nav>
 </template>
 <script>
-
 import typesUtils from "@/modulos/ventas_inventario/store/types/utils";
 import { mapGetters } from "vuex";
-
 
 export default {
   data: () => ({
@@ -66,18 +61,42 @@ export default {
     ],
     opcionesOtros: [["Usuario", "mdi-home", "/usuario"]]
   }),
-  computed:{
+  computed: {
     ...mapGetters({
-      getObjDatosUsuario: typesUtils.getters.getObjDatosUsuario,
+      getObjDatosUsuario: typesUtils.getters.getObjDatosUsuario
     }),
-    nombre_usuario(){
-      return this.getObjDatosUsuario[0].nombre+' '+(this.getObjDatosUsuario[0].apellido_pat!=null?this.getObjDatosUsuario[0].apellido_pat:'')+' '+
-      (this.getObjDatosUsuario[0].apellido_mat!=null ? this.getObjDatosUsuario[0].apellido_mat :'');
+    nombre_usuario() {
+      if (this.getObjDatosUsuario.length > 0) {
+        return (
+          this.getObjDatosUsuario[0].nombre +
+          " " +
+          this.getObjDatosUsuario[0].apellido_pat +
+          " " +
+          this.getObjDatosUsuario[0].apellido_mat
+        );
+      } else {
+        return "";
+      }
     },
-    iniciales(){
-      return this.getObjDatosUsuario[0].nombre.slice(0, 1).toUpperCase() + (this.getObjDatosUsuario[0].apellido_pat !=null?this.getObjDatosUsuario[0].apellido_pat.slice(0, 1).toUpperCase():'');
+    cargo() {
+      if (this.getObjDatosUsuario.length > 0) {
+        return this.getObjDatosUsuario[0].es_admin ? "SUPERVISOR" : "CAJERO";
+      } else {
+        return "";
+      }
+    },
+    iniciales() {
+      if (this.getObjDatosUsuario.length > 0) {
+        return (
+          this.getObjDatosUsuario[0].nombre.slice(0, 1).toUpperCase() +
+          (this.getObjDatosUsuario[0].apellido_pat != null
+            ? this.getObjDatosUsuario[0].apellido_pat.slice(0, 1).toUpperCase()
+            : "")
+        );
+      } else {
+        return "";
+      }
     }
-    
   },
   methods: {
     go(url) {

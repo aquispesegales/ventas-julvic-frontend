@@ -46,7 +46,17 @@
                   dense
                   hide-details
                   outlined
-                  label="Stock"
+                  label="Stock Almacen"
+                  v-model="objProducto.stock_almacen"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  class="caption"
+                  dense
+                  hide-details
+                  outlined
+                  label="Stock Venta"
                   v-model="objProducto.stock"
                 ></v-text-field>
               </v-col>
@@ -92,6 +102,7 @@
           <td class="pa-2 font-weight-light caption">{{item.descripcion}}</td>
           <td class="pa-2 font-weight-light caption">{{item.precio}}</td>
           <td class="pa-2 font-weight-light caption">{{item.stock}}</td>
+          <td class="pa-2 font-weight-light caption">{{item.stock_almacen}}</td>
           <td class="pa-2 font-weight-light caption">{{(item.categoria)?item.categoria.nombre:''}}</td>
           <td
             class="pa-2 font-weight-light caption"
@@ -117,7 +128,7 @@
 </template>
 <script>
 import typesUtils from "@/modulos/ventas_inventario/store/types/utils";
-import {  mapMutations } from "vuex";
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -127,13 +138,14 @@ export default {
         { text: "Nombre", value: "nombre" },
         { text: "Descripcion ", value: "descripcion" },
         { text: "Precio ", value: "precio" },
-        { text: "Stock ", value: "stock" },
+        { text: "Stock Venta", value: "stock" },
+        { text: "Stock Almacen", value: "stock_almacen" },
         { text: "categoria ", value: "categoria.nombre" },
         { text: "Fecha Registro ", value: "fecha_registro" },
         { text: "Acciones ", value: "" }
       ],
       items_producto: [],
-      items_categoria:[],
+      items_categoria: [],
       objProducto: {}
     };
   },
@@ -144,7 +156,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-       setdialogProgress: typesUtils.mutations.setdialogProgress
+      setdialogProgress: typesUtils.mutations.setdialogProgress
     }),
     obtenerCategorias() {
       this.axios.get(`categoria/obtener-todos`).then(r => {
@@ -157,19 +169,23 @@ export default {
       });
     },
     eliminar(item) {
-       this.setdialogProgress(true);
-      this.axios.delete(`producto/eliminar/${item.producto_id}`).then(r => {
-        this.obtenerProductos();
-         this.setdialogProgress(false);
-      }).catch(error => {
-         this.$notify({
-          type: 'error',
-          group: 'notificacion',
-          title: 'Error',
-          text: 'No se pudo eliminar, Verificar si este registro no esta usado'
+      this.setdialogProgress(true);
+      this.axios
+        .delete(`producto/eliminar/${item.producto_id}`)
+        .then(r => {
+          this.obtenerProductos();
+          this.setdialogProgress(false);
+        })
+        .catch(error => {
+          this.$notify({
+            type: "error",
+            group: "notificacion",
+            title: "Error",
+            text:
+              "No se pudo eliminar, Verificar si este registro no esta usado"
+          });
+          this.setdialogProgress(false);
         });
-        this.setdialogProgress(false);
-      });
     },
     editar(item) {
       this.objProducto = item;
@@ -180,11 +196,11 @@ export default {
       this.objProducto = {};
     },
     registrarOactualizar() {
-        if(!this.objProducto.nombre || !this.objProducto.descripcion ){
+      if (!this.objProducto.nombre || !this.objProducto.descripcion) {
         alert("Debe registrar nombre y descripción como mínimo");
-        return ;
+        return;
       }
-       this.setdialogProgress(true);
+      this.setdialogProgress(true);
       if (this.objProducto.producto_id > 0) {
         this.axios
           .put(
@@ -193,12 +209,12 @@ export default {
           )
           .then(r => {
             this.obtenerProductos();
-             this.setdialogProgress(false);
+            this.setdialogProgress(false);
           });
       } else {
         this.axios.post(`producto/registrar`, this.objProducto).then(r => {
           this.obtenerProductos();
-           this.setdialogProgress(false);
+          this.setdialogProgress(false);
         });
       }
       this.dialogo = false;

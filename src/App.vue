@@ -12,18 +12,25 @@
       <app-menu></app-menu>
     </v-navigation-drawer>
     <template>
-
       <v-card class="overflow-hidden">
+
+
         <v-app-bar 
           color="indigo"
           dark
           scroll-target="#scrolling-techniques-7"
           position: fixed 
+          v-if="getObjDatosUsuario.length>0"
         >
-
-        <v-app-bar-nav-icon  @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        
+        
+          <v-app-bar-nav-icon  @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
           <v-toolbar-title  class="pr-7" >{{$route.name}}</v-toolbar-title>
           <v-spacer></v-spacer>
+
+           <v-toolbar-items>
+            <v-btn text small @click="cerrarSession()" >Cerrar Sessión</v-btn>
+          </v-toolbar-items>
 
         <v-menu :close-on-content-click="false" offset-x  v-if="$route.path==='/vender'">
         <template v-slot:activator="{ on }">
@@ -48,14 +55,13 @@
           </div>
         </v-card>
       </v-menu>
+  
 
-
-         
         </v-app-bar>
+
 
         <v-sheet id="scrolling-techniques-7" class="overflow-y-auto" max-height="1000">
           <v-container style="height: 1000px; padding-top:80px;">
-            
             <router-view />
           </v-container>
         </v-sheet>
@@ -74,7 +80,9 @@ import AppMenu from "@/shared/app-menu.vue";
 import typesUtils from "@/modulos/ventas_inventario/store/types/utils";
 import datosCarritoComponent from "@/modulos/ventas_inventario/components/datosCarrito";
 import dialogProgress from "@/shared/dialog-progress";
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
+
+
 
 
 export default {
@@ -89,6 +97,7 @@ export default {
     ...mapGetters({
       getCarrito: typesUtils.getters.getCarrito,
       getdialogProgress: typesUtils.getters.getdialogProgress,
+      getObjDatosUsuario: typesUtils.getters.getObjDatosUsuario,
       
     }),
     cantidadTotal() {
@@ -111,6 +120,14 @@ export default {
   },
 
   methods: {
+    ...mapMutations({
+      setObjDatosUsuario: typesUtils.mutations.setObjDatosUsuario,
+    }),
+    cerrarSession(){
+
+      this.$router.push('/');
+      this.setObjDatosUsuario([]);
+    },
     go(url) {
       this.$router.push(url);
     },

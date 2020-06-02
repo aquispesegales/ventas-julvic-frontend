@@ -31,6 +31,9 @@
             v-model="objCliente.nombre"
           ></v-text-field>
         </v-col>
+          <v-col cols="12">
+                <v-switch v-model="es_factura" :label="`Es con factura?`"></v-switch>
+              </v-col>
         <v-col cols="12">
           <v-btn depressed small color="indigo" dark @click="guardarCarrito()">guardar venta</v-btn>
 
@@ -58,7 +61,8 @@ export default {
   },
   data() {
     return {
-      objCliente: {}
+      objCliente: {},
+      es_factura:false
     };
   },
   computed: {
@@ -102,7 +106,8 @@ export default {
       //arma cabeceera
       let cabe = {
         nit_ci: this.objCliente.nit_ci,
-        cliente_id: this.objCliente.cliente_id
+        cliente_id: this.objCliente.cliente_id,
+        con_factura : this.es_factura
       };
 
       let id_cabecera = 0;
