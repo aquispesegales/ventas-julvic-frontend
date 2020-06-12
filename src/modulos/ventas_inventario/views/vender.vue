@@ -58,7 +58,7 @@
             class="pa-2 font-weight-light caption"
           >{{ $fechas.FormatearFechaParaLocal(item.fecha_registro)}}</td>
           <td>
-            <v-btn depressed small color="indigo" dark @click="vender(item)">vender</v-btn>
+            <v-btn v-if="item.stock!=null & item.stock>0" depressed small color="indigo" dark @click="vender(item)">vender</v-btn>
           </td>
         </tr>
       </template>
