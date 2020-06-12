@@ -5,7 +5,7 @@
         <v-card-title class="indigo pa-2">
           <span dark class="font-weight-light white--text">Agregar a Carrito</span>
           <v-spacer></v-spacer>
-          <v-icon dark medium @click="agregarCarrito()" >mdi-plus</v-icon>
+          <v-icon dark medium @click="agregarCarrito()">mdi-plus</v-icon>
         </v-card-title>
         <v-card-text>
           <v-container class="altura_contenido">
@@ -13,8 +13,19 @@
             {{objCarrito.nombre}}
             <v-divider></v-divider>
             <br />
-            <v-text-field label="Cantidad" class="indigo--text display-1" outlined v-model="objCarrito.cantidad"></v-text-field>
-            <v-text-field outlined class="indigo--text display-1" label="Precio" prefix="Bs " v-model="objCarrito.precio"></v-text-field>
+            <v-text-field
+              label="Cantidad"
+              class="indigo--text display-1"
+              outlined
+              v-model="objCarrito.cantidad"
+            ></v-text-field>
+            <v-text-field
+              outlined
+              class="indigo--text display-1"
+              label="Precio"
+              prefix="Bs "
+              v-model="objCarrito.precio"
+            ></v-text-field>
           </v-container>
         </v-card-text>
       </v-card>
@@ -47,24 +58,21 @@
             class="pa-2 font-weight-light caption"
           >{{ $fechas.FormatearFechaParaLocal(item.fecha_registro)}}</td>
           <td>
-            <v-btn depressed small color="indigo" dark @click="vender(item)" >vender</v-btn>
+            <v-btn depressed small color="indigo" dark @click="vender(item)">vender</v-btn>
           </td>
         </tr>
       </template>
-      
     </v-data-table>
-
   </v-card>
 </template>
 <script>
 import typesUtils from "@/modulos/ventas_inventario/store/types/utils";
 
-import { mapMutations, mapGetters } from 'vuex';
+import { mapMutations, mapGetters } from "vuex";
 export default {
- 
   data() {
     return {
-        dialogo:false,
+      dialogo: false,
       search: "",
       header_producto: [
         { text: "Nombre", value: "nombre" },
@@ -83,52 +91,67 @@ export default {
   mounted() {
     this.obtenerProductos();
   },
-  computed:{
+  computed: {
     ...mapGetters({
       getCarrito: typesUtils.getters.getCarrito
     })
   },
   methods: {
     ...mapMutations({
-        addCarrito: typesUtils.mutations.addCarrito
+      addCarrito: typesUtils.mutations.addCarrito
     }),
     obtenerProductos() {
       this.axios.get(`producto/obtener-todos`).then(r => {
         this.items_producto = r.data.productos;
       });
     },
-    vender(item){
-        this.dialogo=true;
-        this.objCarrito = item;
+    vender(item) {
+      this.dialogo = true;
+      this.objCarrito = item;
     },
-    agregarCarrito(){
-      if(!this.objCarrito.cantidad || this.objCarrito.cantidad<=0){
-        return alert('Cantidad Incorrecta');
+    agregarCarrito() {
+      if (!this.objCarrito.cantidad || this.objCarrito.cantidad <= 0) {
+        this.$mensaje.Mensaje("error", "Cantidad Incorrecta");
+        return;
       }
-        if(!this.objCarrito.precio || this.objCarrito.precio<=0){
-        return alert('Precio Incorrecta');
+      if (!this.objCarrito.precio || this.objCarrito.precio <= 0) {
+        this.$mensaje.Mensaje("error", "Precio Incorrecto");
+        return;
       }
-      if(this.objCarrito.cantidad > this.objCarrito.stock ){
-          return alert('Cantidad disponible: '+ this.objCarrito.stock);
+      if (this.objCarrito.cantidad > this.objCarrito.stock) {
+        this.$mensaje.Mensaje(
+          "error",
+          "Cantidad disponible: " + this.objCarrito.stock
+        );
+        return;
       }
-      if(this.getCarrito.filter(x => x.producto_id===this.objCarrito.producto_id).length>0){
+      if (
+        this.getCarrito.filter(
+          x => x.producto_id === this.objCarrito.producto_id
+        ).length > 0
+      ) {
+        let cantidadTotalComprado = this.getCarrito.reduce(function(
+          total,
+          currentValue
+        ) {
+          return total + parseInt(currentValue.cantidad);
+        },
+        0);
 
-    
-      let cantidadTotalComprado =  this.getCarrito.reduce(function(total, currentValue) {
-        return total + parseInt(currentValue.cantidad);
-      }, 0);
-
-
-        if(cantidadTotalComprado >= this.objCarrito.stock){
-           return alert('Anteriormente ya Agrego a Carrito : '+cantidadTotalComprado);
+        if (cantidadTotalComprado >= this.objCarrito.stock) {
+          this.$mensaje.Mensaje(
+            "error",
+            "Anteriormente ya Agrego a Carrito : " + cantidadTotalComprado
+          );
+          return;
         }
       }
 
       let carrito = {
-        producto_id : this.objCarrito.producto_id,
-        nombre : this.objCarrito.nombre,
-        precio : this.objCarrito.precio,
-        cantidad : this.objCarrito.cantidad,
+        producto_id: this.objCarrito.producto_id,
+        nombre: this.objCarrito.nombre,
+        precio: this.objCarrito.precio,
+        cantidad: this.objCarrito.cantidad
       };
       this.addCarrito(carrito);
       this.dialogo = false;

@@ -1,29 +1,13 @@
 <template>
   <v-app id="inspire">
     <v-content>
-      <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
-        >
-          <v-col
-            cols="12"
-            sm="8"
-            md="4"
-          >
+      <v-container class="fill-height" fluid>
+        <v-row align="center" justify="center">
+          <v-col cols="12" sm="8" md="4">
             <v-card class="elevation-12">
-              <v-toolbar
-                color="primary"
-                dark
-                flat
-                
-              >
+              <v-toolbar color="primary" dark flat>
                 <v-toolbar-title>Autenticación</v-toolbar-title>
                 <v-spacer></v-spacer>
-           
               </v-toolbar>
               <v-card-text>
                 <v-form>
@@ -57,32 +41,31 @@
 <script>
 import typesUtils from "@/modulos/ventas_inventario/store/types/utils";
 import { mapGetters, mapMutations } from "vuex";
-  export default {
-
-    data(){
-        return{
-            usuario:null,
-            contraseña:null,
+export default {
+  data() {
+    return {
+      usuario: null,
+      contraseña: null
+    };
+  },
+  methods: {
+    ...mapMutations({
+      setObjDatosUsuario: typesUtils.mutations.setObjDatosUsuario
+    }),
+    autenticarse() {
+      let data = {
+        usuario_pc: this.usuario,
+        ci: this.contraseña
+      };
+      this.axios.post("usuario/autenticar", data).then(r => {
+        if (r.data.code != 200) {
+          this.$mensaje.Mensaje("error", "Uusario no existe");
+        } else {
+          this.setObjDatosUsuario(r.data.usuario);
+          this.$router.push("/vender");
         }
-    },
-    methods:{
-        ...mapMutations({
-            setObjDatosUsuario:typesUtils.mutations.setObjDatosUsuario
-        }),
-        autenticarse(){
-            let data = {
-                usuario_pc : this.usuario,
-                ci:this.contraseña
-            };
-            this.axios.post('usuario/autenticar',data).then(r=>{
-                if(r.data.code!=200){
-                    alert("Usuario No existe");
-                }else{
-                    this.setObjDatosUsuario(r.data.usuario);
-                    this.$router.push('/vender');
-                }
-            });
-        }
+      });
     }
   }
+};
 </script>

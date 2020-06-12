@@ -14,22 +14,22 @@
     <template>
       <v-card class="overflow-hidden">
 
-
         <v-app-bar 
           color="indigo"
           dark
           scroll-target="#scrolling-techniques-7"
           position: fixed 
-          v-if="getObjDatosUsuario.length>0"
+          v-if="$route.path!='/'"
         >
         
-        
+
           <v-app-bar-nav-icon  @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
           <v-toolbar-title  class="pr-7" >{{$route.name}}</v-toolbar-title>
           <v-spacer></v-spacer>
 
            <v-toolbar-items>
             <v-btn text small @click="cerrarSession()" >Cerrar Sessión</v-btn>
+            
           </v-toolbar-items>
 
         <v-menu :close-on-content-click="false" offset-x  v-if="$route.path==='/vender'">
@@ -87,11 +87,22 @@ import { mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "App",
+  
   components: {
     AppMenu,
     dialogProgress,
-    datosCarritoComponent
+    datosCarritoComponent,
+    
   
+  },
+
+  data: () => ({
+    drawer: false,
+    group: null,
+    usuario:[]
+  }),
+    mounted(){
+    this.usuario  = JSON.parse(localStorage.getItem("usuario"));
   },
   computed: {
     ...mapGetters({
@@ -109,10 +120,6 @@ export default {
 
 
   },
-  data: () => ({
-    drawer: false,
-    group: null,
-  }),
   watch: {
     group() {
       this.drawer = false;
@@ -126,7 +133,9 @@ export default {
     cerrarSession(){
 
       this.$router.push('/');
-      this.setObjDatosUsuario([]);
+      //localStorage.removeItem("usuario");
+       localStorage.removeItem("usuario");
+      //this.setObjDatosUsuario([]);
     },
     go(url) {
       this.$router.push(url);

@@ -4,7 +4,7 @@ const state = {
     carrito:[],
     tituloNav:'',
     dialogProgress:false,
-    objDatosUsuario:[]
+    //objDatosUsuario:[]
 };
 
 const getters = {
@@ -15,7 +15,12 @@ const getters = {
         return state.carrito;
     },
     [types.getters.getObjDatosUsuario]: state => {
-        return state.objDatosUsuario;
+        //return state.objDatosUsuario;
+        if (JSON.parse(localStorage.getItem("usuario"))!=null){
+            return JSON.parse(localStorage.getItem("usuario"));
+        }else{
+            return [];
+        }
     },
 
 }
@@ -33,7 +38,8 @@ const mutations = {
         state.dialogProgress = dialogProgress;
     },
     [types.mutations.setObjDatosUsuario]: (state, objDatosUsuarios) => {
-        state.objDatosUsuario = objDatosUsuarios;
+        //state.objDatosUsuario = objDatosUsuarios;
+        localStorage.setItem("usuario",JSON.stringify(objDatosUsuarios))
     }
 }
 

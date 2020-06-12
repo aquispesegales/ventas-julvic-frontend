@@ -197,7 +197,8 @@ export default {
     },
     registrarOactualizar() {
       if (!this.objProducto.nombre || !this.objProducto.descripcion) {
-        alert("Debe registrar nombre y descripción como mínimo");
+        
+        this.$mensaje.Mensaje('error','Debe registrar nombre y descripción como mínimo');
         return;
       }
       this.setdialogProgress(true);

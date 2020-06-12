@@ -199,7 +199,8 @@ export default {
     },
     registrarOactualizar() {
       if(!this.objCliente.nombre || !this.objCliente.nit_ci ){
-        alert("Debe registrar nombre y ci como mínimo");
+        
+        this.$mensaje.Mensaje('error','Debe registrar nombre y ci como mínimo');
         return ;
       }
        this.setdialogProgress(true);
@@ -212,7 +213,8 @@ export default {
           .then(r => {
 
                if(r.data.code!=200){
-            alert("Error al registrar clientes, comunicarse con sistemas");
+            
+            this.$mensaje.Mensaje('error','Error al registrar clientes, comunicarse con sistemas');
           }
 
              this.setdialogProgress(false);
@@ -221,7 +223,8 @@ export default {
       } else {
         this.axios.post(`cliente/registrar`, this.objCliente).then(r => {
            if(r.data.code!=200){
-                   alert("Error al registrar clientes, comunicarse con sistemas");
+                   
+                   this.$mensaje.Mensaje('error','Error al registrar clientes, comunicarse con sistemas');
           }
 
           this.obtenerClientes();

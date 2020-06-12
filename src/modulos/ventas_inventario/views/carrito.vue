@@ -86,21 +86,21 @@ export default {
            this.objCliente = {};
           if (r.data.code == 200) {
             this.objCliente = r.data.cliente;
-            console.log("respuesta");
-            console.log(r.cliente);
           }else{
-            alert("Cliente no Encontrado")
+            //alert("Cliente no Registrado")
+            this.$mensaje.Mensaje('error','Cliente No Registrado');
           }
           this.setdialogProgress(false);
         });
     },
     guardarCarrito() {
       if (Object.keys(this.objCliente).length === 0) {
-        alert("Debe registrar Cliente");
+        //alert("Debe registrar Cliente");
+        this.$mensaje.Mensaje('error','Debe Registrar Cliente');
         return;
       }
       if (this.getCarrito.length <= 0) {
-        alert("Debe Registrar Productos");
+         this.$mensaje.Mensaje('error','Debe Registrar Productos');
         return;
       }
       //arma cabeceera
@@ -132,10 +132,12 @@ export default {
                    if (rr.data.code == 200) {
                       this.objCliente={};
                       this.setCarrito([]);
-                      alert("Venta Realizada")
+                      
+                      this.$mensaje.Mensaje('success','Venta Realizada');
                       this.$router.push('/vender');
                    }else{
-                     alert("Erro al relizar la venta, favor comunicarse con sistemas")
+                     
+                     this.$mensaje.Mensaje('error','Erro al relizar la venta, favor comunicarse con sistemas');
                    }
                    this.setdialogProgress(false);
                 });

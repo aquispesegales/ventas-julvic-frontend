@@ -202,7 +202,8 @@ export default {
           )
           .then(r => {
             if (r.data.code != 200) {
-              alert("Erro al Actualizar Usuario conuquese con sistemas");
+              
+              this.$mensaje.Mensaje('error','Error al registrar Usuarios, comunicarse con sistemas');
             } else {
               this.obtenerUsuarios();
             }
@@ -212,7 +213,8 @@ export default {
       } else {
         this.axios.post(`usuario/registrar`, this.objUsuario).then(r => {
           if (r.data.code != 200) {
-            alert("Erro al insertar Usuario conuquese con sistemas");
+            
+            this.$mensaje.Mensaje('error','Error al registrar Usuarios, comunicarse con sistemas');
           } else {
             this.obtenerUsuarios();
           }
