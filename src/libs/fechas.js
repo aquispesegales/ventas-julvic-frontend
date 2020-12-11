@@ -11,6 +11,7 @@ export default {
         if (pFecha != null && pFecha != '')
           return moment(pFecha, 'DD/MM/YYYY HH:mm').format('YYYY-MM-DDTHH:mm:ssZ');
         return ''
+        
       },
       FormatearDDMMYYYY(pFecha) {
         if (pFecha != null && pFecha != '')

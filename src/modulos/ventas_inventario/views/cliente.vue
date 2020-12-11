@@ -118,16 +118,10 @@
       </template>
       <template v-slot:item="{ item }">
         <tr>
-          <td class="pa-2 font-weight-light caption">{{item.nombre}}</td>
-          <td class="pa-2 font-weight-light caption">{{item.nit_ci}}</td>
-          <td class="pa-2 font-weight-light caption">{{item.apellido_pat}}</td>
-          <td class="pa-2 font-weight-light caption">{{item.apellido_mat}}</td>
-          <td class="pa-2 font-weight-light caption">{{item.correo}}</td>
-          <td class="pa-2 font-weight-light caption">{{item.telefono}}</td>
+          <td class="pa-2 font-weight-light caption">{{item.nit}}</td>
+          <td class="pa-2 font-weight-light caption">{{item.razonSocial}}</td>
           <td class="pa-2 font-weight-light caption">{{item.direccion}}</td>
-          <td
-            class="pa-2 font-weight-light caption"
-          >{{ $fechas.FormatearFechaParaLocal(item.fecha_registro)}}</td>
+          <td class="pa-2 font-weight-light caption">{{item.email}}</td>
           <td>
             <v-btn class="mx-2" fab dark x-small color="teal" @click="editar(item)">
               <v-icon dark small>mdi-pencil</v-icon>
@@ -157,14 +151,10 @@ export default {
       dialogo: false,
       search: "",
       header_cliente: [
-        { text: "Nombre", value: "nombre" },
-        { text: "NIT o CI", value: "nit_ci" },
-        { text: "Apellido Paterno ", value: "apellido_pat" },
-        { text: "Apellido Materno ", value: "apellido_mat" },
-        { text: "Correo ", value: "correo" },
-        { text: "Teléfono ", value: "telefono" },
+        { text: "Nit", value: "nit" },
+        { text: "Razon Social", value: "razonSocial" },
         { text: "Dirección ", value: "direccion" },
-        { text: "Fecha Registro ", value: "fecha_registro" },
+        { text: "Email ", value: "email" },
         { text: "Acciones ", value: "" }
       ],
       items_cliente: [],
